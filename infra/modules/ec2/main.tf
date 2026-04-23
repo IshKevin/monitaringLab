@@ -1,5 +1,22 @@
+data "aws_ami" "ubuntu" {
+  most_recent = true
+  owners      = ["099720109477"] # Canonical (Ubuntu)
+
+  filter {
+    name   = "name"
+    values = ["ubuntu/images/hvm-ssd/ubuntu-jammy-22.04-amd64-server-*"]
+  }
+
+  filter {
+    name   = "virtualization-type"
+    values = ["hvm"]
+  }
+}
+
 
 # Generate SSH key
+
+
 resource "tls_private_key" "ssh_key" {
   algorithm = "RSA"
   rsa_bits  = 4096
@@ -78,8 +95,8 @@ resource "aws_vpc_security_group_egress_rule" "all" {
 
 # EC2 Instance
 resource "aws_instance" "this" {
-  ami                    = "ami-0442403fb8d244144"  
-  instance_type          = "t3.medium"              
+  ami                    = data.aws_ami.ubuntu.id
+  instance_type          = "t3.medium"
   key_name               = aws_key_pair.generated.key_name
   vpc_security_group_ids = [aws_security_group.this.id]
 
