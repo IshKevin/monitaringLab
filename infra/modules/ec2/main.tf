@@ -51,6 +51,24 @@ resource "aws_vpc_security_group_ingress_rule" "jenkins" {
   ip_protocol       = "tcp"
 }
 
+# Prometheus
+resource "aws_vpc_security_group_ingress_rule" "prometheus" {
+  security_group_id = aws_security_group.this.id
+  cidr_ipv4         = "0.0.0.0/0"
+  from_port         = 9090
+  to_port           = 9090
+  ip_protocol       = "tcp"
+}
+
+# Grafana
+resource "aws_vpc_security_group_ingress_rule" "grafana" {
+  security_group_id = aws_security_group.this.id
+  cidr_ipv4         = "0.0.0.0/0"
+  from_port         = 3000
+  to_port           = 3000
+  ip_protocol       = "tcp"
+}
+
 # Allow all outbound
 resource "aws_vpc_security_group_egress_rule" "all" {
   security_group_id = aws_security_group.this.id
