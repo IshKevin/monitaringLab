@@ -1,0 +1,8 @@
+{
+    "log-driver": "awslogs",
+    "log-opts": {
+        "awslogs-group": "monitoringLab",
+        "awslogs-region": "us-east-1",
+        "awslogs-stream": "app"
+    }
+}

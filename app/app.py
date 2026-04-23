@@ -1,14 +1,32 @@
-from flask import Flask, jsonify
+from flask import Flask, jsonify, request
+from prometheus_client import Counter, Histogram, generate_latest
+import time
 
 app = Flask(__name__)
 
+REQUEST_COUNT = Counter("app_requests_total", "Total Requests")
+REQUEST_LATENCY = Histogram("app_request_latency_seconds", "Request latency")
+
 @app.route("/")
 def home():
-    return "CI/CD Running 🚀 add push event"
+    REQUEST_COUNT.inc()
+    return jsonify({"message": "Monitoring App Running"})
 
-@app.route("/health")
-def health():
-    return jsonify({"status": "ok"})
+@app.route("/slow")
+def slow():
+    start = time.time()
+    time.sleep(1.2)
+    REQUEST_LATENCY.observe(time.time() - start)
+    return "slow response"
+
+@app.route("/metrics")
+def metrics():
+    return generate_latest(), 200, {"Content-Type": "text/plain"}
+
+@app.route("/error")
+def error():
+    REQUEST_COUNT.inc()
+    return "error occurred", 500
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000)

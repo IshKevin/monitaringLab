@@ -1,0 +1,10 @@
+groups:
+  - name: app-alerts
+    rules:
+      - alert: HighErrorRate
+        expr: rate(app_requests_total{status="500"}[1m]) / rate(app_requests_total[1m]) * 100 > 5
+        for: 1m
+        labels:
+          severity: critical
+        annotations:
+          summary: "High error rate detected (>5%)"
