@@ -2,32 +2,63 @@ terraform {
   required_version = ">= 1.5.0"
 
   # backend "s3" {
-  #   bucket         = "multicontainerlab-state-854fb003"
-  #   key            = "state/terraform.tfstate"
+  #   bucket         = "state-bucket"
+  #   key            = "monitoringLab/terraform.tfstate"
   #   region         = "eu-west-1"
   #   dynamodb_table = "terraform-lock"
   # }
+   required_providers {
+    aws = {
+      source  = "hashicorp/aws"
+    }
+    random = {
+      source  = "hashicorp/random"
+    }
+  }
 }
 
-module "jenkins" {
-  source = "./modules/ec2"
-
-  name           = "jenkins"
-  instance_type  = var.instance_type
-  enable_jenkins = true
+provider "aws" {
+  region = var.region
 }
 
 module "app" {
   source = "./modules/ec2"
 
-  name          = "app"
+  name          = "app-server"
   instance_type = var.instance_type
+  app_port      = 5000
 }
 
 
-# resource "local_file" "key_name" {
-#     jenkins_ip = module.jenkins.public_ip
-#     app_ip     = module.app.public_ip
-#     key_path   = "../terraform/${module.jenkins.key_name}.pem"
+module "monitoring" {
+  source = "./modules/ec2"
 
+  name          = "monitoring-server"
+  instance_type = var.instance_type
+  app_port      = 9090
+}
+
+
+resource "random_id" "suffix" {
+  byte_length = 4
+}
+
+module "cloudtrail_bucket" {
+  source      = "./modules/bucket"
+  bucket_name = "${var.project_name}-cloudtrail-logs-${random_id.suffix.hex}"
+}
+
+
+# resource "aws_cloudtrail" "main" {
+#   name           = "monitoring-trail"
+#   s3_bucket_name = module.cloudtrail_bucket.bucket_id
+
+#   include_global_service_events = true
+#   is_multi_region_trail         = true
+#   enable_logging                = true
+# }
+
+
+# resource "aws_guardduty_detector" "main" {
+#   enable = true
 # }

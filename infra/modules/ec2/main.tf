@@ -59,23 +59,23 @@ resource "aws_vpc_security_group_ingress_rule" "app" {
 }
 
 # Jenkins Port
-resource "aws_vpc_security_group_ingress_rule" "jenkins" {
-  count             = var.enable_jenkins ? 1 : 0
-  security_group_id = aws_security_group.this.id
-  cidr_ipv4         = "0.0.0.0/0"
-  from_port         = 8080
-  to_port           = 8080
-  ip_protocol       = "tcp"
-}
+# resource "aws_vpc_security_group_ingress_rule" "jenkins" {
+#   count             = var.enable_jenkins ? 1 : 0
+#   security_group_id = aws_security_group.this.id
+#   cidr_ipv4         = "0.0.0.0/0"
+#   from_port         = 8080
+#   to_port           = 8080
+#   ip_protocol       = "tcp"
+# }
 
 # Prometheus
-resource "aws_vpc_security_group_ingress_rule" "prometheus" {
-  security_group_id = aws_security_group.this.id
-  cidr_ipv4         = "0.0.0.0/0"
-  from_port         = 9090
-  to_port           = 9090
-  ip_protocol       = "tcp"
-}
+# resource "aws_vpc_security_group_ingress_rule" "prometheus" {
+#   security_group_id = aws_security_group.this.id
+#   cidr_ipv4         = "0.0.0.0/0"
+#   from_port         = 9090
+#   to_port           = 9090
+#   ip_protocol       = "tcp"
+# }
 
 # Grafana
 resource "aws_vpc_security_group_ingress_rule" "grafana" {
@@ -93,10 +93,18 @@ resource "aws_vpc_security_group_egress_rule" "all" {
   ip_protocol       = "-1"
 }
 
+resource "aws_vpc_security_group_ingress_rule" "node_exporter" {
+  security_group_id = aws_security_group.this.id
+  cidr_ipv4         = "0.0.0.0/0"
+  from_port         = 9100
+  to_port           = 9100
+  ip_protocol       = "tcp"
+}
+
 # EC2 Instance
 resource "aws_instance" "this" {
   ami                    = data.aws_ami.ubuntu.id
-  instance_type          = "t3.medium"
+  instance_type          = "t3.micro"
   key_name               = aws_key_pair.generated.key_name
   vpc_security_group_ids = [aws_security_group.this.id]
 
@@ -105,3 +113,4 @@ resource "aws_instance" "this" {
     Role = var.name
   }
 }
+
