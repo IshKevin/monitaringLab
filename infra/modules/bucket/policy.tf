@@ -5,7 +5,7 @@ resource "aws_s3_bucket_policy" "cloudtrail" {
     Version = "2012-10-17"
     Statement = [
       {
-        Sid = "AWSCloudTrailAclCheck"
+        Sid    = "AWSCloudTrailAclCheck20150319"
         Effect = "Allow"
         Principal = {
           Service = "cloudtrail.amazonaws.com"
@@ -14,7 +14,7 @@ resource "aws_s3_bucket_policy" "cloudtrail" {
         Resource = aws_s3_bucket.this.arn
       },
       {
-        Sid = "AWSCloudTrailWrite"
+        Sid    = "AWSCloudTrailWrite20150319"
         Effect = "Allow"
         Principal = {
           Service = "cloudtrail.amazonaws.com"
