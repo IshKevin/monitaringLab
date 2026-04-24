@@ -29,7 +29,7 @@ def metrics():
 
 @app.route("/error")
 def error():
-    REQUEST_COUNT.inc()
+    REQUEST_COUNT.labels(status="500").inc()
     return "error occurred", 500
 
 if __name__ == "__main__":
