@@ -2,9 +2,9 @@ pipeline {
     agent any
 
     environment {
-        IMAGE = "ishikevin/flask-app:latest"
-        REGISTRY = "docker.io"
-        SERVER = "ec2-user@52.213.31.127"
+        IMAGE = ""
+        REGISTRY = ""
+        SERVER = ""
     }
 
    
