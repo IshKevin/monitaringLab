@@ -65,6 +65,7 @@ monitoringLab/
 ├── grafana/
 ├── cloudwatch/
 ├── reports/
+├── monitoring/ # New directory for Docker Compose setup
 └── README.md
 ```
 
@@ -478,4 +479,3 @@ reports/report.pdf
 # 🚀 Author
 
 MonitoringLab Project — DevOps Observability & Security Stack
-
