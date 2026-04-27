@@ -20,13 +20,15 @@ def test_home_endpoint(client):
 def test_error_endpoint(client):
     response = client.get("/error")
     assert response.status_code == 500
-    assert b"error occurred" in response.data
+    assert response.is_json
+    assert response.get_json() == {"error": "An error occurred"}
 
 
 def test_slow_endpoint(client):
     response = client.get("/slow")
     assert response.status_code == 200
-    assert response.data == b"slow response"
+    assert response.is_json
+    assert response.get_json() == {"message": "Slow response"}
 
 
 def test_metrics_endpoint_includes_prometheus_metrics(client):
