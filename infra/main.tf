@@ -21,13 +21,13 @@ provider "aws" {
   region = var.region
 }
 
-module "app" {
-  source = "./modules/ec2"
+# module "app" {
+#   source = "./modules/ec2"
 
-  name          = "app-server"
-  instance_type = var.instance_type
-  app_port      = 5000
-}
+#   name          = "app-server"
+#   instance_type = var.instance_type
+#   app_port      = 5000
+# }
 
 
 module "monitoring" {
