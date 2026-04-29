@@ -53,8 +53,8 @@ resource "aws_vpc_security_group_ingress_rule" "ssh" {
 resource "aws_vpc_security_group_ingress_rule" "app" {
   security_group_id = aws_security_group.this.id
   cidr_ipv4         = "0.0.0.0/0"
-  from_port         = var.app_port
-  to_port           = var.app_port
+  from_port         = 5000
+  to_port           = 5000
   ip_protocol       = "tcp"
 }
 
